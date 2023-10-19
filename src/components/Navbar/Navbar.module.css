@@ -1,0 +1,22 @@
+.nav {
+  grid-area: n;
+  background-color: mediumspringgreen;
+  margin-top: 10px;
+}
+
+.item {
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.item a {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  text-decoration: none;
+}
+
+.item a.active {
+  color: gold;
+}

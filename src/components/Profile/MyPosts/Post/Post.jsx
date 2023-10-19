@@ -1,7 +1,7 @@
 import React from "react";
 import s from "./Post.module.css";
 
-export default function Post({ message }) {
+export default function Post({ message, likesCount }) {
   return (
     <div className={s.item}>
       <img
@@ -9,6 +9,7 @@ export default function Post({ message }) {
         src="https://ih0.redbubble.net/image.3085033708.0360/raf,360x360,075,t,fafafa:ca443f4786.jpg"
       />
       {message}
+      <div className={s.likes}>Likes {likesCount}</div>
     </div>
   );
 }
