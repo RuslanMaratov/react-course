@@ -5,7 +5,7 @@ import Profile from "./components/Profile/Profile";
 import Dialogs from "./components/Dialogs/Dialogs";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-function App({ state }) {
+function App({ state, dispatch }) {
   return (
     <BrowserRouter>
       <div className="app">
@@ -15,7 +15,9 @@ function App({ state }) {
           <Routes>
             <Route
               path="/profile"
-              element={<Profile profileState={state.profilePage} />}
+              element={
+                <Profile profileState={state.profilePage} dispatch={dispatch} />
+              }
             />
             <Route
               path="/dialogs/*"
