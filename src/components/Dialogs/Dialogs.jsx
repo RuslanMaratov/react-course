@@ -3,18 +3,44 @@ import s from "./Dialogs.module.css";
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
 
-export default function Dialogs({ dialogsState }) {
-  let dialogs = dialogsState.dialogsData.map((d) => (
-    <DialogItem name={d.name} id={d.id} />
-  ));
-  let messages = dialogsState.messagesData.map((m) => (
-    <Message message={m.message} />
-  ));
+export default function Dialogs({
+  updateNewMessageBody,
+  sendMessage,
+  dialogsData,
+  messagesData,
+  newMessageBody,
+}) {
+  console.log(dialogsData);
+  let dialogs = dialogsData.map((d) => <DialogItem name={d.name} id={d.id} />);
+  let messages = messagesData.map((m) => <Message message={m.message} />);
+
+  const onSendMessageClick = () => {
+    sendMessage();
+  };
+  const onNewMessageChange = (event) => {
+    let body = event.target.value;
+    updateNewMessageBody(body);
+  };
 
   return (
     <div className={s.dialogs}>
       <div className={s.dialogsItems}>{dialogs}</div>
-      <div className={s.messages}>{messages}</div>
+      <div className={s.messages}>
+        <div>{messages}</div>
+        <div>
+          <textarea
+            value={newMessageBody}
+            onChange={onNewMessageChange}
+            name=""
+            id=""
+            cols="30"
+            rows="10"
+          ></textarea>
+        </div>
+        <div>
+          <button onClick={onSendMessageClick}>Send</button>
+        </div>
+      </div>
     </div>
   );
 }

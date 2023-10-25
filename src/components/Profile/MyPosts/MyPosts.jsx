@@ -3,20 +3,25 @@ import Post from "./Post/Post";
 import s from "./MyPosts.module.css";
 import { useRef } from "react";
 
-export default function MyPosts({ postsData, dispatch, newPostText }) {
+export default function MyPosts({
+  updateNewPost,
+  clickedAddPost,
+  posts,
+  newPostText,
+}) {
   const newPostElement = useRef();
 
-  let posts = postsData.map((p) => (
+  let postsElements = posts.map((p) => (
     <Post message={p.message} likesCount={p.likesCount} />
   ));
 
-  const clickedAddPost = () => {
-    dispatch({ type: "ADD-POST" });
+  const onAddPost = () => {
+    clickedAddPost();
   };
 
   let onPostChange = () => {
     let text = newPostElement.current.value;
-    dispatch({ type: "UPDATE-NEW-POST-TEXT", newText: text });
+    updateNewPost(text);
   };
 
   return (
@@ -31,10 +36,10 @@ export default function MyPosts({ postsData, dispatch, newPostText }) {
           ></textarea>
         </div>
         <div>
-          <button onClick={clickedAddPost}>Add post</button>
+          <button onClick={onAddPost}>Add post</button>
         </div>
       </div>
-      <div className={s.posts}>{posts}</div>
+      <div className={s.posts}>{postsElements}</div>
     </div>
   );
 }

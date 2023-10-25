@@ -2,10 +2,10 @@ import "./App.css";
 import Header from "./components/Header/Header";
 import Navbar from "./components/Navbar/Navbar";
 import Profile from "./components/Profile/Profile";
-import Dialogs from "./components/Dialogs/Dialogs";
+import DialogsContainer from "./components/Dialogs/DialogsContainer";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-function App({ state, dispatch }) {
+function App({ store }) {
   return (
     <BrowserRouter>
       <div className="app">
@@ -13,15 +13,10 @@ function App({ state, dispatch }) {
         <Navbar />
         <div className="app-content">
           <Routes>
-            <Route
-              path="/profile"
-              element={
-                <Profile profileState={state.profilePage} dispatch={dispatch} />
-              }
-            />
+            <Route path="/profile" element={<Profile store={store} />} />
             <Route
               path="/dialogs/*"
-              element={<Dialogs dialogsState={state.dialogsPage} />}
+              element={<DialogsContainer store={store} />}
             />
             <Route path="/news" element={<button />} />
             <Route path="/music" element={<button />} />

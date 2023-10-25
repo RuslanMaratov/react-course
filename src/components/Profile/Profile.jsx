@@ -1,16 +1,12 @@
 import React from "react";
-import MyPosts from "./MyPosts/MyPosts";
+import MyPostsContainer from "./MyPosts/MyPostsContainer";
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
 
-export default function Profile({ profileState, dispatch }) {
+export default function Profile({ store }) {
   return (
     <div>
       <ProfileInfo />
-      <MyPosts
-        postsData={profileState.postsData}
-        newPostText={profileState.newPostText}
-        dispatch={dispatch}
-      />
+      <MyPostsContainer store={store} />
     </div>
   );
 }
