@@ -6,13 +6,14 @@ import Message from "./Message/Message";
 export default function Dialogs({
   updateNewMessageBody,
   sendMessage,
-  dialogsData,
-  messagesData,
-  newMessageBody,
+  dialogsPage,
 }) {
-  console.log(dialogsData);
-  let dialogs = dialogsData.map((d) => <DialogItem name={d.name} id={d.id} />);
-  let messages = messagesData.map((m) => <Message message={m.message} />);
+  let dialogs = dialogsPage.dialogsData.map((d) => (
+    <DialogItem name={d.name} id={d.id} />
+  ));
+  let messages = dialogsPage.messagesData.map((m) => (
+    <Message message={m.message} />
+  ));
 
   const onSendMessageClick = () => {
     sendMessage();
@@ -29,7 +30,7 @@ export default function Dialogs({
         <div>{messages}</div>
         <div>
           <textarea
-            value={newMessageBody}
+            value={dialogsPage.newMessageBody}
             onChange={onNewMessageChange}
             name=""
             id=""

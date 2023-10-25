@@ -19,9 +19,7 @@ export default function DialogsContainer({ store }) {
     <Dialogs
       updateNewMessageBody={onNewMessageChange}
       sendMessage={onSendMessageClick}
-      dialogsData={state.dialogsPage.dialogsData}
-      messageData={state.dialogsData.messageData}
-      newMessageBody={state.newMessageBody}
+      dialogsPage={state.dialogsPage}
     />
   );
 }
