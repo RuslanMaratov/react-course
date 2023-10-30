@@ -9,10 +9,10 @@ export default function Dialogs({
   dialogsPage,
 }) {
   let dialogs = dialogsPage.dialogsData.map((d) => (
-    <DialogItem name={d.name} id={d.id} />
+    <DialogItem name={d.name} id={d.id} key={d.id} />
   ));
   let messages = dialogsPage.messagesData.map((m) => (
-    <Message message={m.message} />
+    <Message message={m.message} key={m.id} />
   ));
 
   const onSendMessageClick = () => {

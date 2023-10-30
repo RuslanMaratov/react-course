@@ -12,6 +12,6 @@
 .app-content {
   width: 100%;
   grid-area: p;
-  background-color: gold;
+  background-color: white;
   margin-top: 10px;
 }
