@@ -1,31 +1,53 @@
-import React from "react";
 import s from "./Users.module.css";
+import axios from "axios";
+import userPhoto from "../../assets/userPhoto.png";
+import React, { Component } from "react";
 
-let Users = ({ follow, unfollow, setUsers, users }) => {
-  return users.map((u) => (
-    <div className={s.userWrapper} key={u.id}>
-      <div className={s.userTitle}>
-        <img
-          className={s.userPhoto}
-          alt="userPhoto"
-          src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBUVFRgVFRUYGRgYGBoZGBwZGRoYHBocHBgZHBoaGhocIS4lHB4rIRgYJjgmKy8xNTU1HCQ7QDs0Py40NTEBDAwMEA8QHxISHzUmJCs0NDY0NDY0NDQ0NDQ0PTQ0NDExMTQ0NDQ0NjQ0NDQ0NDQ0NDQ9NDQ0NTQ3NDY2NTExNf/AABEIAPQAzgMBIgACEQEDEQH/xAAcAAABBQEBAQAAAAAAAAAAAAAAAQIEBQYDBwj/xAA9EAABAwIDBAcHAwIFBQAAAAABAAIRAyEEEjEFQVHwBiJhcYGRoRMyQrHB0eEHUvFiciMzQ4KSFCRTosL/xAAZAQEAAwEBAAAAAAAAAAAAAAAAAQIDBAX/xAAsEQACAgIBAgQFBAMAAAAAAAAAAQIRAyESMUEEUWGBInGxwdETFKHwI0KR/9oADAMBAAIRAxEAPwD19CEIAQhCAISoQgBIgoQAkJUXaG0GUWF7zAb5kmIHeSR5qixfSZrGNcW++67pGVoAl0XzODQDcC5jiosmi5xW2MPTEuqtkiQ0HM90mBlYJcZ7AsltH9SKTCW0qTnkT1nOa1tuGUmfRed7R2s6q925pJudS3O97Z4Rn0G4d6i4mpIieqCcugMRbNfgB5IKR6Vgf1AloNVrBJN2ucYEG2XLGaYgA6dquMH01w9RwEOaDF3CNZuBGgIIMkGRYFeJPfYdaeOtlLp1XAZWEwbucd8XERu1U0NH0NRrMeJY4OHFpBHoui+fcNt2vSsKjxYSA5zbbtCFu9g/qC0NDazSQSOu0+7a8gydwPiVFij0dKuGFxTKjA9jg5rtCDI/ldlJA9CanIAQhCAEIQgBCEIBiEqRACVIlQAkSpEAIQmVXQCUB590z2632b6YcS9zyCODA4Fs7rxrr9fPMTj31Dlk2aW3O8kAme2yn9KcRNR92xncRBJ1JMabrhZl7ydN+5QlZZuh1ZxBjgkZVi9kU6jxYeXb3b059B5vF487qSDo98iWgnUusMrRrb7plIF9gYPDimOY6DEkWJjwie4kJcNUvFhPGyCjqARaQYXelUjcL68COeQnP6wAbbtO8qIHuBvuKMk1vRjpS/BvAMupE9Zo4fuHavZsJimVWNqMcHMeA5pG8H5L5/okHK4tsTFxv3hewdCXN9kQyzCGvyySGPOYPDbnqy0HXeVCDRp0IQpKjkIQgBCEIAQhCAahCEAIQhACRKhAIq7bmLbSoVHuJDQ3drewA7ZViqHpqycHV3Q2ZnSDu7d3igR4btCrneTpJOp7V2wGz3PuBb5qK9knsELW7IIyABZ5JOMdG2KKlLZzwmx2i5H3VtTwbI9wHwldaVOyl0mWXK5tncscUtIzG0dkFpL6bddRxEyZHCypcVs3OC9jHMI1BFt0kHeF6Q2mOC4votIgiytGbRWWOLPKfYvYZv5rpkkZjY8NfrPmtdtXYBdJYR3FZvEUX0zley278FdEcikcmTFxfoScKB7K/wC8Ed19/l5hemfpxXJY9s6bvrPovNMGJb1yGg8foONl6L+nbiXVR8IAMdpjxnx+4nuZvob5CQJVcoOQhCAEIQgBCEIBsIhOTUAIQhACRKkQAqbpbhy/B12jXIXf8esfQFXK44pmZj2n4mOHm0hAfO1YXWh2I+GXVKxmZ7Ad+vgFdHEspe+QBuHFYZdqkdWHT5F5TBN+KnUi7sVBhtu0yYNt9hKvcBj6VT3XCfI+qx4tdTqWRPoyYCVHrNcpzANVW7R2tTp2cb9gkePBONhyS6nLMd6rtr0c7NLqNiekLJhrSeMAqVsraDKpLQCCBMOBHzsQpjGUXZSc4yVIytPDgO8YXrP6d4draD3AXe+5jcGiPmVgdq4RrK0D3XAH1AK9U6LU8uFpdoLv+TiV0xdnDJVotglCQJVcoOQhCAEIQgBCEIAQhCAahCEAJClSIASJVk+ltV5exrT1WwYBLSXOJvbeBEeKrKXFWXxwc5cUeWUKJbXyHVhc097bQrtuCYJrVIIa207oHaoIw2XEviSLvvJPXvftmVoGUQ5jWkWCwnLejqxw00zO4zEU5E4YAOZnBJDMzZMRvJsYBAVthMLkvkDCGh0TuIsRxERO8TdWlDZzCQSGmAdRMLhtJ7WAtZHWsSAB3wock0WjB2TWYzqT2Kq2hQL4aGhziC6HGLC/hbsJPBSqXugHeF1w4Duo6+XsBsqLRrOJmNnYwXy4dkNbmcW3cIOUjrNbmdcGxNjaTYaDAsYYqMtOvyOv4Uiph6YO62iQAA23qZT8jNQ1sqOkJh7Cf2n0IW+6J7Vpuo0qQzSGNEkQ0uyyWgzJIA4blitt4fMaZOmcA9zoV5gqIpuY5mjS2DNrOEiBa+b0WvOqMv0uVm9QhC3OQchCEAICEIAQhCAEJAlQAmpyEA1CEIBFk+kbgMQ0O0yB3+6S0HwutYVnelmELg2o0TllrrTAdp4TPmFTIribYZKM9nneI6uKqMJkkNPpJHmVb4YdVUHSBjqeIY8EkERe54RO9XmCfIB3fz+FzTWkzri/iaJlNhJhRMdhjnDR8MF3ed3PFW2HhrS4rGdJNsMzlrQHh0SD7sjQjfOlxwURi2XlJRVs1jsMMjbid6Zh6MOudRY/QrN1toNfhoyyJa2Hku1mJnXTeuGzOkLGEB7MrR1YaOq294bu3HxVuDop+qm+psK2H3+q5CkAm7O2kys05HB2XzHBdn1IlZ1su5aIe0CHPps4uDj4birfBNFSsxrfczggdjRmJ7reqzGDrmrio3NnugDThqt/sDCy41iN2VvbxP081so3JIw58Ytl+hIlC6TiFCVIEqAEIQgBCEIAQhCAEIQgBNTk0oBE17A4FrgCCIIO8J6RAeY/qJsQUWMqtcSDUygHVstc65m46seKp9j4sZRJ0gAcOHjEr0H9QsNnwNQgSWFj/AOAcfBrnHwXkNCrlLY4ifE8+qynFNUjeGR3bLfpTtF8soscQ3JndG+TA8gJ/wByq8Lsd1aCwEkaht4HadAVOcwVMTxbkaTad0AdgsPIK2pNFO+dzAdwcRr3d5VE+KSRskpNtnWj0ZdkLTS1hxJeALTFhN1U7T6PmkMzmE3PukGOqPh1HaVbO2qy7XYh+lwXPiL63TGMpOuCXcJsPXVRyaL1F60ZrYGeniWAAjPLSDIBaQVocftEAObJm+nj9h5qNiXNbiWO3ta6Z3S1wF+GtlR1cVL3E30ie5Tx5OzFy4po236dbPZUqVHvEkDSTvN5jX8L0xjQAABAFgBuWF/TCl/h1ah1LwwdwANuy63YWyRzyYJQkShWKjkJAlQAhCEAJUiEAIQhACEIQAmpyagBIlSICLtLDCpSqUzo9jmH/c0j6r55rsLXuabEOI3wDuI3wvo8rxD9QMMGYqsQIBeDbS7Wu+ZQlWU+DxrmvJnSOyYIA57Vo8ViKT6M5gHQSI0aDcX7hbwWJD+PYurcS6Ym0zHoqSx27NY5eOmWLqZc4uPVk022PFs+el+K0b8bSDCQYOgFvegtnxt5rM18UAwMaZL/AHibkHNNvTyUbF4suygGzY7BaYj5qHDkSsiV0SMdjXPfmMzv3Xm+niuVNpc62tvPf6qI0T58/RaPYmziSHu8B9forOooormz1DoJh2sw2Vo+Mz35W3WmCoOiX+U4cH//ACPsr8JF2islUmgCVIEoVio5CEIAQhCAEIQgBCEIAQhCAEITUAJEqRABXlfT7CZsRUG92SO8saAvVCvPOleR2KfvhrQe9oghZ5HSs1wq5UecYnZD2tza8dPoq72LgbBemvwrXNiFWUdlMD4Ii+tj81SObzNJ4V2MIaL7SHeW/s7VIoYB7j7pF94+i9TobHpxoCNQCB56XTa2zqbTZo9TPme9S8zKrCjz3D7NeHNyjeJJgeHeb+a1WDdYdWDpppBuB4zdWDsG21pjy/GqfkjkLOUuRtCHE1PRL3Hj+ofI/ZX6yvRvGNZnDnBodFzoIB1O4X1WqC3g/hObKqkwT01OVzMEIQgBCEIAQhKgEQhCAEIQgBCFxxFdrG5nODQN5+Q4nsQHRRcdjqdFuao8NGt9T3AXOo0VJjtu1nWoU8jN9at1GgcQ10eE+Syu3KZewva19QZhmxDzGY3EMZuZJAkLWGJt7KOfkXuP6WZwfYNIE5Q51ibSS1u4aXN+5ZPDvJec2tzJ1Mn7yuuyjmpkftf6OH3XR1CHgjeF5+ZtZJRfZ17HoYYrgpLuidRS4mjKSmpOWyojRnXA1jkynUaJpBuSn0W2S1BZSVOGWyjuUrcojioLIKbiCI3KfsrpE6k8UMhezNlYG+82ROVs2LRe1oA8FALw1pLtAJd3cPFVeymNq1uvV9lMuDhY5rZQDu17LCN66vBxc5Svol/Jy+Lail53/B6dgNp0q05HdZvvNNnNjWWn5iynrCVaTqRDsSC4NIy4ikYe3hn3nxnxWhwO1pbJe2qwfEy7gP62D5i/9K6ZY62to5YyvqXSFxw+JY9uZj2ubxaQfkuyyLghCEAJUiVAIgoSEoBVEx+0adETUcGzoNXOPBrRclVG1dtOiKbm02H/AFXjMXdlGnq89sQd06rO1bDO+oaLiJL3nPiXgxEAXptjc3TetYY76lJSoutp7eqtiMmHafiqHO+OLabJjxlVNN+Kc8upse4nSrXEOA3ljSQ1gPAAn5KLhsUwO/7bDOqPm9SoC9wPER7vfIU84DG1/wDOq+zYdWtiSOBDLHxcVuoKPWl8zJyb6W/kRNoYckgVqrsRX+GiyzG8S/LoBOoDT81KfsPEVmO9tUyw3qUmQGgj3Q4C0SI3nS+5W+yNj08ODkBJNi46mPQCdwU57/Uqjy1pf35F44+7PL9n18jxNmu6ruy9iZ0grQuZK49KtjlpNdjZY67wPhcTd39p38D32gbM2jYMeYcLNJ0cNwJ489/J4zFyrPFXqmvl3Onw2RR/xS15Fw9kBPYVxNa2hlJSqcVxWmrR28X3JTXwnudKjOMp7SpsmhtUrmWWlFd17Ksx2046jDLtCRcN7uJ9AkYyyS4QVv6epWUowVy19zntTEyfZg6GXndO4eFvFaXZHR+mcOPaMGd/WnRzAR1QDu4xxN1UdGNiGo4PeP8ADBkz8ZB90cROp7x3bolenGKwxWOL6bb82edJvJJyl37eSMwdn4nDAmm4VafxU3AmW8Mhn/1PgVEw+EoV3B2HqGjU/Y4mx35HAzHdPcFsQq3amxadfrEZX/vaLzuzD4vn2haRzb+LXqvujGWLy/5+Cqa6thpfVpkO/wDNRjj/AKjLNcNbkA9s3Wl2btfO0OOVzT8dOYH9zD1m+qzJGOw+hNVg73+nvjwsox2hhqjszmvw1UH32aA/1AQfTxVpY+W1v1X4IjPjr6norXAgEGQdCLgpyyOza1SmS8v9oxxBz0oc09r6Y0PazxlaHB7QY9uZrmkcWmR48CueUHE2UrJqVIEqoWEWc6S45wY4Nc1rc2VznXAEGTl1eZEBo1kTYFXWOxGRtveOn1Kp34NlRuWo0ODXBwBv1oIk8bEq0aTtkSutGYwlKpWdmoh0mzsRV949lMCco1iL8SFdYLo9RZ1nj2j9S595P9unnJ7VbtaBA5ATlo8reo6RVQS67GtbAAAgDQCwHcE6EsJWBZFwdpC5G5T3lDGKQAbu8CsjtzorcvoNlp1YNW/2cR2bu3drylarRm4vRVpPTPMGV6tM5TePheDI87hSWbXb8THN7ocPWF6HicMx4h7Gvj9wBju4KnxHRfDO0D2X+F8jyfKrPF4ebuUafmnReOTLBVF2vUyx2nT4u/4/lNfthvwte49sAeklaJ/Q9m6q4d7A76jn06UOidEe897uwZWD5HhxVF4Xw67t+5d+JzPWl7GOq4mrVOUWmBlYCS6d1rnu9Fodh9EzZ9cQNzJ6x4ZiNB2a9y0+D2fSpe4wA73au8SZP0UnnkrZSjFccaSXp9zJpydydsaGAAAAAAQABAA3AAWCMqejnVUJOZalZ80s8ykI3oAHqFGxmAp1R12Nd2kXHc4XHmpTtZQibW0Q0n1M4/o25hz4aq5juDjIPYSBp3gquq1nMqA1WexrSOsB/hVAD8cG39zZF7gLaLliKLXjK9ocOBEharM/9t/UzeJdtFjhak9Xhp3KSqskgyFOw9XML6jX7rFmpTVape8u8B3cyu1EiY4/ZRaQ58FI0vzqFIOuVLHP1T3ceSmlQBChASOchIkSV0cmCyc35/NCAKVvP2SHnvSA8/VAOPPdwSc/yl5/ITUA7ntH3CaeeH4Sjn8FEc/cIA5/ghKef50KaOY+yUHnRAB5n7hLzx+aOedyR1v4+qADzp9kNvrrzuXP27ZifGLbt/ink7/qoUk+hLTQobuKQBOJ3/koPP5ViBITQLpxKVm8qANebpJ4JHIBUkEZmg7p+a7R9fmEx4sP7foU8Gw7ihJ0pu3b7x5/lKmsPWHj9E54uoAFNHHyRqgtlAILnsUfD41rnFoBHfaSNbblFx+IzAtZmGXWRAduLfDXtuuApuJDgHB0X3TEQ6/gD+V5mbxslNRxq0uvqdmPw643Lq+noXk/lErnTdIEwHRMWXRejGSkrRytU6F5/hHP8pAf4+yfz2/lWKjeexLzx/KObfZIOYQDuePqkPO9E86JTzP3CAaFC2xPs3HPk0g2kmdBrJIBERPBTo51WS2ri3vOdjS+SGMElrQHaF7h7rYguggkuA0as8rXGvMtF07OVQnrO/xBmOeWvqTYuhrQRYHNoYFhotHsio57C4kQXHLF4ExBg3IMiexV2D2u6o0BmV7fd9xxMjdGYTYT7okcLwzDVHUnh18j4Lu42JtAlsa/taRcZY5MdRn1fuqo2nNyjTo0ccwkSxzBTZ5hd5zgl3d5SSnOtCA5HnckQSmqQLVb8kDQePzT3iYKazRAK03Hjz6J9U3XMbu8fVOqWUAVpgfwmVgS05Tc6eYmDuMSnNKXMOTHzsokuSolOnZXHB1HC7t9pc4wJda1iYIv2J3/AEBJkuBN9QSTLs3Wk3jTyVhzwP5Rzdc37TH3t+5t+4l2I2HwYY4ODtBuEeYUk88ClHPHwS89h/K3hjjBVFUZSk5O2N5j7ISxzwS8/lXIG5uPpYoJ5I+yVzU1CB2bvRPOiQIQkcHjn8LO08K4F9E9aWwLHc0XJ3AtBHe5q0Cj4nCl0OY7K9uh3EftPZ4HuKyyw5JEp0YrE4B9Eh1AFrxULmveQPZtAp9V73PADRL9WkuEyAVZVNpjE0mOALXHMwjVucgs6rviaSWwe2NQQrTGYV72uZUwwfnblc4PYB2EBz5BEAyINhom7E2E2gBa4uALyf3OJGsfCLDibRFOcGpO23fTsFSla6UXDtTefFEcE4jv9E082WpUIXSr9FzBuElV30VgMlACVAHNkA7ckp6lIhAIUVzdCFDA4pQhCAcORuQ5CEAoShCEAiAhCEjvvHgmFCEIAIQhCQTkiEIBI9CEA0u7B5JUIQCN1Q7VIhSBDokKEID/2Q=="
-        />
-        <button className={s.followButton}>
-          {u.followed ? "Followed" : "Unfollowed"}
-        </button>
-      </div>
-      <div className={s.userInfo}>
-        <div className={s.userStatusName}>
-          <div className={s.userName}>{u.fullName}</div>
-          <div className={s.userStatus}>{u.status}</div>
-        </div>
-        <div className={s.userLocation}>
-          {u.location.city},<br />
-          {u.location.country}
-        </div>
-      </div>
-    </div>
-  ));
-};
+export default class Users extends Component {
+  constructor(props) {
+    super(props);
+    axios
+      .get("https://social-network.samuraijs.com/api/1.0/users")
+      .then((response) => this.props.setUsers(response.data.items));
+  }
 
-export default Users;
+  render() {
+    return this.props.users.map((u) => (
+      <div className={s.userWrapper} key={u.id}>
+        <div className={s.userTitle}>
+          <img
+            className={s.userPhoto}
+            alt="userPhoto"
+            src={u.photos.small != null ? u.photos.small : userPhoto}
+          />
+          {u.followed ? (
+            <button
+              onClick={() => this.props.follow(u.id)}
+              className={s.followButton}
+            >
+              Follow
+            </button>
+          ) : (
+            <button
+              onClick={() => this.props.unfollow(u.id)}
+              className={s.followButton}
+            >
+              Unfollow
+            </button>
+          )}
+        </div>
+        <div className={s.userInfo}>
+          <div className={s.userStatusName}>
+            <div className={s.userName}>{u.name}</div>
+            <div className={s.userStatus}>{u.status}</div>
+          </div>
+          <div className={s.userLocation}>
+            u.location.city,
+            <br />
+            u.location.country
+          </div>
+        </div>
+      </div>
+    ));
+  }
+}
