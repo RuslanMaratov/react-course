@@ -67,3 +67,7 @@
 .userLocation {
   margin-right: 10px;
 }
+
+.selectedPage {
+  font-weight: 800;
+}
