@@ -2,12 +2,15 @@ import React from "react";
 import s from "./Dialogs.module.css";
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
+import { Navigate } from "react-router-dom";
 
 export default function Dialogs({
   updateNewMessageBody,
   sendMessage,
   dialogsPage,
+  isAuth,
 }) {
+  if (!isAuth) return <Navigate to={"/login"} />;
   let dialogs = dialogsPage.dialogsData.map((d) => (
     <DialogItem name={d.name} id={d.id} key={d.id} />
   ));

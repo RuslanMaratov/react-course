@@ -10,19 +10,20 @@ let Users = (props) => {
   for (let i = 1; i <= pagesCount; i++) {
     pages.push(i);
   }
-
   return (
     <div>
-      <div>
+      <div className={s.pagination}>
         {pages.map((p) => {
           return (
-            <span
+            <div
               key={p}
               onClick={() => props.onPageChanged(p)}
-              className={props.currentPage === p ? s.selectedPage : undefined}
+              className={
+                props.currentPage === p ? s.selectedPage : s.paginationItem
+              }
             >
               {p}
-            </span>
+            </div>
           );
         })}
       </div>
@@ -39,17 +40,37 @@ let Users = (props) => {
             </NavLink>
             {u.followed ? (
               <button
-                onClick={() => props.follow(u.id)}
-                className={s.followButton}
-              >
-                Follow
-              </button>
-            ) : (
-              <button
-                onClick={() => props.unfollow(u.id)}
+                disabled={props.isToggleFollowing.some((id) => id === u.id)}
+                onClick={() => {
+                  props.unfollow(u.id);
+                  // props.toggleFollowing(true, u.id);
+                  // usersApi.unfollowUser(u.id).then((data) => {
+                  //   if (data.resultCode === 0) {
+                  //     props.unfollow(u.id);
+                  //   }
+                  //   props.toggleFollowing(false, u.id);
+                  // });
+                }}
                 className={s.followButton}
               >
                 Unfollow
+              </button>
+            ) : (
+              <button
+                disabled={props.isToggleFollowing.some((id) => id === u.id)}
+                onClick={() => {
+                  props.follow(u.id);
+                  // props.toggleFollowing(true, u.id);
+                  // usersApi.followUser(u.id).then((data) => {
+                  //   if (data.resultCode === 0) {
+                  //     props.follow(u.id);
+                  //   }
+                  //   props.toggleFollowing(false, u.id);
+                  // });
+                }}
+                className={s.followButton}
+              >
+                Follow
               </button>
             )}
           </div>

@@ -11,8 +11,8 @@ export default function MyPosts({
 }) {
   const newPostElement = useRef();
 
-  let postsElements = posts.map((p) => (
-    <Post message={p.message} likesCount={p.likesCount} />
+  let postsElements = posts.map((p, i) => (
+    <Post key={i} message={p.message} likesCount={p.likesCount} />
   ));
 
   const onAddPost = () => {

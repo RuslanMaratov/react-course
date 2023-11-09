@@ -1,9 +1,25 @@
 .header {
   grid-area: h;
-  background-color: mediumspringgreen;
+  background: rgb(237, 14, 176);
+  background: linear-gradient(
+    90deg,
+    rgba(237, 14, 176, 1) 20%,
+    rgba(221, 11, 223, 1) 43%,
+    rgba(253, 4, 226, 1) 62%,
+    rgba(188, 0, 255, 1) 81%
+  );
 }
 
 .header img {
   width: 60px;
   margin-left: 10px;
+}
+
+.loginWrapper {
+  float: right;
+}
+
+.loginWrapper a {
+  color: white;
+  text-decoration: none;
 }
