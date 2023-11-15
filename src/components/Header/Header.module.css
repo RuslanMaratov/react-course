@@ -23,3 +23,7 @@
   color: white;
   text-decoration: none;
 }
+
+.logoutWrapper {
+  display: flex;
+}

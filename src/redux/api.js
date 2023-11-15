@@ -27,12 +27,31 @@ export const usersApi = {
     });
   },
   getUserProfile(userId) {
+    console.warn("Please use profileApi!");
+    return profileApi.getUserProfile(userId);
+  },
+};
+
+export const profileApi = {
+  getUserProfile(userId) {
     return instance.get(`profile/${userId}`);
+  },
+  getStatus(userId) {
+    return instance.get(`profile/status/${userId}`);
+  },
+  updateStatus(status) {
+    return instance.put(`profile/status`, { status });
   },
 };
 
 export const authApi = {
-  getAuthApi() {
+  me() {
     return instance.get(`auth/me`);
+  },
+  login(email, password, rememberMe = false) {
+    return instance.post(`auth/login`, { email, password, rememberMe });
+  },
+  logout() {
+    return instance.delete(`auth/login`);
   },
 };

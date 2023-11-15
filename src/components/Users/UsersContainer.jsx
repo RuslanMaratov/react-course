@@ -8,7 +8,7 @@ import {
   getUsers,
 } from "../../redux/users-reducer";
 import Users from "./Users";
-import Preloader from "./Preloader";
+import Preloader from "../common/Preloader/Preloader";
 import { compose } from "redux";
 
 class UsersContainer extends Component {
