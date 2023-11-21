@@ -8,13 +8,15 @@ import {
 } from "../../../utils/validators/validators";
 import { TextArea } from "../../common/FormsControls/FormsControls";
 
-export default function MyPosts({ clickedAddPost, posts }) {
-  let postsElements = posts.map((p, i) => (
+const MyPosts = React.memo((props) => {
+  console.log(props);
+  console.log("RENDER YO");
+  let postsElements = props.posts.map((p, i) => (
     <Post key={i} message={p.message} likesCount={p.likesCount} />
   ));
 
   const addPost = (values) => {
-    clickedAddPost(values.newPostText);
+    props.clickedAddPost(values.newPostText);
   };
 
   return (
@@ -28,7 +30,7 @@ export default function MyPosts({ clickedAddPost, posts }) {
       <div className={s.posts}>{postsElements}</div>
     </div>
   );
-}
+});
 
 const maxLength10 = maxLengthCreator(10);
 
@@ -51,3 +53,5 @@ const AddPostForm = (props) => {
 };
 
 const AddPostFormRedux = reduxForm({ form: "myPosts" })(AddPostForm);
+
+export default MyPosts;

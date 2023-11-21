@@ -108,7 +108,7 @@ export const toggleFollowing = (isFetching, userId) => {
   return { type: IS_TOGGLE_FOLLOWING, isFetching, userId };
 };
 
-export const getUsers = (currentPage, pageSize) => (dispatch) => {
+export const requestUsers = (currentPage, pageSize) => (dispatch) => {
   dispatch(toggleIsFetching(true));
   dispatch(setCurrentPage(currentPage));
 
