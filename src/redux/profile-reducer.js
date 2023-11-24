@@ -4,6 +4,7 @@ import { profileApi } from "./api";
 let ADD_POST = "ADD-POST";
 let SET_USER_PROFILE = "SET_USER_PROFILE";
 let SET_STATUS = "SET_STATUS";
+let SAVE_PHOTO_SUCCESS = "SAVE_PHOTO_SUCCESS";
 
 let initialState = {
   postsData: [
@@ -33,6 +34,8 @@ const profileReducer = (state = initialState, action) => {
       return { ...state, profile: action.profile };
     case SET_STATUS:
       return { ...state, status: action.status };
+    case SAVE_PHOTO_SUCCESS:
+      return { ...state, profile: { ...state.profile, photos: action.photos } };
     default:
       return state;
   }
@@ -47,23 +50,29 @@ export const setUserProfile = (profile) => {
 export const setStatus = (status) => {
   return { type: SET_STATUS, status };
 };
+export const savePhotoSuccess = (photos) => {
+  return { type: SAVE_PHOTO_SUCCESS, photos };
+};
 
-export const getProfile = (userId) => (dispatch) => {
-  usersApi.getUserProfile(userId).then((response) => {
-    dispatch(setUserProfile(response.data));
-  });
+export const getProfile = (userId) => async (dispatch) => {
+  let response = await usersApi.getUserProfile(userId);
+  dispatch(setUserProfile(response.data));
 };
-export const getStatus = (userId) => (dispatch) => {
-  profileApi.getStatus(userId).then((response) => {
-    dispatch(setStatus(response.data));
-  });
+export const getStatus = (userId) => async (dispatch) => {
+  let response = await profileApi.getStatus(userId);
+  dispatch(setStatus(response.data));
 };
-export const updateStatus = (status) => (dispatch) => {
-  profileApi.updateStatus(status).then((response) => {
-    if (response.data.resultCode === 0) {
-      dispatch(setStatus(status));
-    }
-  });
+export const updateStatus = (status) => async (dispatch) => {
+  let response = await profileApi.updateStatus(status);
+  if (response.data.resultCode === 0) {
+    dispatch(setStatus(status));
+  }
+};
+export const savePhoto = (file) => async (dispatch) => {
+  let response = await profileApi.savePhoto(file);
+  if (response.data.resultCode === 0) {
+    dispatch(savePhotoSuccess(response.data.data.photos));
+  }
 };
 
 export default profileReducer;
