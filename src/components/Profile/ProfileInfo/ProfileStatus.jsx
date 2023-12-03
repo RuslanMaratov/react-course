@@ -24,6 +24,7 @@ export default function ProfileStatus({ status, updateStatus }) {
 
   return (
     <div>
+      <b>Status:</b>
       {editMode ? (
         <div>
           <input

@@ -110,7 +110,7 @@ export const requestUsers = (currentPage, pageSize) => async (dispatch) => {
   let data = await usersApi.getUsers(currentPage, pageSize);
   dispatch(toggleIsFetching(false));
   dispatch(setUsers(data.items));
-  dispatch(setTotalUsersCount(data.totalCount / 100));
+  dispatch(setTotalUsersCount(data.totalCount / 90));
 };
 
 const followUnfollowFlow = async (

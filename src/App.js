@@ -33,6 +33,14 @@ class App extends Component {
         <div className="app-content">
           <Routes>
             <Route
+              path="/"
+              element={
+                <Suspense fallback={<Preloader />}>
+                  <ProfileContainer />
+                </Suspense>
+              }
+            />
+            <Route
               path="/profile/:userId?"
               element={
                 <Suspense fallback={<Preloader />}>
